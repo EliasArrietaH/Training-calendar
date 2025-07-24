@@ -1,28 +1,12 @@
-import { IsOptional, IsString, IsArray, IsDateString } from 'class-validator';
+import { IsString, IsObject } from 'class-validator';
 
 export class UpdateEventDto {
-  @IsOptional()
   @IsString()
-  summary?: string;
+  token: string;
 
-  @IsOptional()
   @IsString()
-  location?: string;
+  eventId: string;
 
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @IsOptional()
-  @IsDateString()
-  startDateTime?: string;
-
-  @IsOptional()
-  @IsDateString()
-  endDateTime?: string;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  attendees?: string[];
+  @IsObject()
+  event: Record<string, any>;
 }

@@ -1,7 +1,12 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class SearchEventsDto {
-  @IsOptional()
   @IsString()
-  q?: string;
+  token: string;
+
+  @IsString()
+  timeMin: string;
+
+  @IsString()
+  searchTerm: string;
 }

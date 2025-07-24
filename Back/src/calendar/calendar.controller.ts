@@ -1,5 +1,5 @@
-// calendar.controller.ts
-import { Controller, Post, Body } from '@nestjs/common';
+
+import { Controller, Post, Body, Headers } from '@nestjs/common';
 import { CalendarService } from './calendar.service';
 
 @Controller('calendar')
@@ -11,9 +11,29 @@ export class CalendarController {
     return this.calendarService.listEvents(body.token, body.timeMin, body.timeMax);
   }
 
+  @Post('search')
+  async search( @Body() body: { token: string; timeMin: string; searchTerm: string },) {
+  return this.calendarService.searchEvents(body.token, body.timeMin, body.searchTerm);
+  }
+
   @Post('create')
   async create(@Body() body: { token: string; event: any }) {
     return this.calendarService.insertEvent(body.token, body.event);
+  }
+
+   @Post('share')
+  async shareCalendar(
+    @Headers('authorization') authHeader: string,
+    @Body() body: { calendarId: string; userEmail: string; role: 'reader' | 'writer' | 'owner' },
+  ) {
+    const token = authHeader?.replace('Bearer ', '');
+
+    return await this.calendarService.shareCalendar(
+      token,
+      body.calendarId,
+      body.userEmail,
+      body.role,
+    );
   }
 
   @Post('update')
