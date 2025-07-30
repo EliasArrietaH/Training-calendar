@@ -1,6 +1,7 @@
 
-import { Controller, Post, Body, Headers } from '@nestjs/common';
+import { Controller, Post, Body, Headers, UnauthorizedException } from '@nestjs/common';
 import { CalendarService } from './calendar.service';
+import { CreateEventDto } from './dto/create-event.dto';
 
 @Controller('calendar')
 export class CalendarController {
@@ -20,6 +21,24 @@ export class CalendarController {
   async create(@Body() body: { token: string; event: any }) {
     return this.calendarService.insertEvent(body.token, body.event);
   }
+
+  
+  @Post('events/private')
+  async createPrivateEvent(
+    @Body() dto: CreateEventDto,
+    @Headers('Authorization') authHeader: string
+  ) {
+    const accessToken = this.extractToken(authHeader); 
+    return this.calendarService.createPrivateEvent(dto, accessToken);
+  }
+
+  // Función auxiliar que limpia el token
+  private extractToken(authHeader: string): string {
+    if (!authHeader || !authHeader.startsWith('Bearer '))
+      throw new UnauthorizedException('Token no proporcionado o mal formado');
+    return authHeader.replace('Bearer ', '');
+  }
+
 
    @Post('share')
   async shareCalendar(

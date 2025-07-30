@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { CalendarModule } from './calendar/calendar.module';
 import { ConfigModule } from '@nestjs/config';
 import { GoogleAuthModule } from './calendar/google/google-auth.module';
+import { DatabaseService } from './database/database.service';
 
 @Module({
   imports: [
@@ -11,9 +12,9 @@ import { GoogleAuthModule } from './calendar/google/google-auth.module';
       isGlobal: true,
     }),
     CalendarModule,
-    GoogleAuthModule, // <-- importalo acá
+    GoogleAuthModule, 
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, DatabaseService],
 })
 export class AppModule {}

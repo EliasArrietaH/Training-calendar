@@ -21,5 +21,5 @@ export class CreateEventDto {
   @IsOptional()
   @IsArray()
   attendees?: string[];
-  startDate: any;
+
 }
